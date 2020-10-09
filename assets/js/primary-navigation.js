@@ -8,6 +8,7 @@
  * Toggle an attribute's value
  *
  * @param {Element} el - The element.
+ * @param {boolean} withListeners - Whether we want to add/remove listeners or not.
  * @since 1.0.0
  */
 function twentytwentyoneToggleAriaExpanded( el, withListeners ) {
@@ -37,7 +38,13 @@ function twentytwentyoneCollapseMenuOnClickOutside( event ) {
  *
  * @param {Element} el - The element.
  */
-function twentytwentyoneExpandSubMenu( el ) {
+function twentytwentyoneExpandSubMenu( el ) { // eslint-disable-line no-unused-vars
+	// Close submenu that was opened from a hover action.
+	// We'll return early in this case to avoid changing the aria-expanded attribute.
+	if ( el.parentNode.classList.contains( 'hover' ) ) {
+		el.parentNode.classList.remove( 'hover' );
+		return;
+	}
 
 	// Close other expanded items.
 	el.closest( 'nav' ).querySelectorAll( '.sub-menu-toggle' ).forEach( function( button ) {
@@ -60,23 +67,22 @@ function twentytwentyoneExpandSubMenu( el ) {
 }
 
 ( function() {
-
 	/**
 	 * Menu Toggle Behaviors
 	 *
-	 * @param {Element} element
+	 * @param {string} id - The ID.
 	 */
-	var navMenu = function ( id ){
-		var wrapper      = document.body, // this is the element to which a CSS class is added when a mobile nav menu is open
-			mobileButton = document.getElementById( `${ id }-mobile-menu` );
+	var navMenu = function( id ) {
+		var wrapper = document.body, // this is the element to which a CSS class is added when a mobile nav menu is open
+			mobileButton = document.getElementById( id + '-mobile-menu' );
 
-		if ( mobileButton ){
+		if ( mobileButton ) {
 			mobileButton.onclick = function() {
-				wrapper.classList.toggle( `${ id }-navigation-open` );
+				wrapper.classList.toggle( id + '-navigation-open' );
 				wrapper.classList.toggle( 'lock-scrolling' );
 				twentytwentyoneToggleAriaExpanded( mobileButton );
 				mobileButton.focus();
-			}
+			};
 		}
 		/**
 		 * Trap keyboard navigation in the menu modal.
@@ -84,12 +90,12 @@ function twentytwentyoneExpandSubMenu( el ) {
 		 */
 		document.addEventListener( 'keydown', function( event ) {
 			var modal, elements, selectors, lastEl, firstEl, activeEl, tabKey, shiftKey, escKey;
-			if ( ! wrapper.classList.contains( `${ id }-navigation-open` ) ){
+			if ( ! wrapper.classList.contains( id + '-navigation-open' ) ) {
 				return;
 			}
 
-			modal = document.querySelector( `.${ id }-navigation` );
-			selectors = "input, a, button";
+			modal = document.querySelector( '.' + id + '-navigation' );
+			selectors = 'input, a, button';
 			elements = modal.querySelectorAll( selectors );
 			elements = Array.prototype.slice.call( elements );
 			tabKey = event.keyCode === 9;
@@ -101,7 +107,7 @@ function twentytwentyoneExpandSubMenu( el ) {
 
 			if ( escKey ) {
 				event.preventDefault();
-				wrapper.classList.remove( `${ id }-navigation-open`, 'lock-scrolling' );
+				wrapper.classList.remove( id + '-navigation-open', 'lock-scrolling' );
 				twentytwentyoneToggleAriaExpanded( mobileButton );
 				mobileButton.focus();
 			}
@@ -124,15 +130,17 @@ function twentytwentyoneExpandSubMenu( el ) {
 
 		document.getElementById( 'site-navigation' ).querySelectorAll( '.menu-wrapper > .menu-item-has-children' ).forEach( function( li ) {
 			li.addEventListener( 'mouseenter', function() {
-				this.classList.add( 'hover' );
+				if ( 'false' === this.querySelector( '.sub-menu-toggle' ).getAttribute( 'aria-expanded' ) ) {
+					this.classList.add( 'hover' );
+				}
 			} );
 			li.addEventListener( 'mouseleave', function() {
 				this.classList.remove( 'hover' );
 			} );
 		} );
-	}
+	};
 
 	window.addEventListener( 'load', function() {
 		new navMenu( 'primary' );
-	});
-} )();
+	} );
+}() );

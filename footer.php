@@ -24,20 +24,15 @@
 			<div class="site-name">
 				<?php if ( has_custom_logo() ) : ?>
 					<div class="site-logo"><?php the_custom_logo(); ?></div>
-					<?php
-					else :
-						$blog_info = get_bloginfo( 'name' );
-						if ( ! empty( $blog_info ) ) :
-							if ( is_front_page() && ! is_paged() ) :
-								?>
-								<?php bloginfo( 'name' ); ?>
-							<?php else : ?>
+				<?php else : ?>
+					<?php if ( get_bloginfo( 'name' ) && get_theme_mod( 'display_title_and_tagline', true ) ) : ?>
+						<?php if ( is_front_page() && ! is_paged() ) : ?>
+							<?php bloginfo( 'name' ); ?>
+						<?php else : ?>
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-								<?php
-								endif;
-							endif;
-						endif;
-					?>
+						<?php endif; ?>
+					<?php endif; ?>
+				<?php endif; ?>
 			</div><!-- .site-name -->
 			<div class="copyright">
 				<?php
@@ -48,13 +43,6 @@
 					esc_html( date_i18n( _x( 'Y', 'copyright date format', 'twentytwentyone' ) ) ),
 					esc_html( get_bloginfo( 'name' ) . '.' )
 				);
-
-				/**
-				 * WIP: Remove or add spacing?
-				if ( function_exists( 'the_privacy_policy_link' ) ) {
-					the_privacy_policy_link();
-				}
-				 */
 				?>
 				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentytwentyone' ) ); ?>"  class="imprint">
 				<?php /* translators: %s: WordPress. */ printf( esc_html__( 'Proudly powered by %s.', 'twentytwentyone' ), 'WordPress' ); ?>
