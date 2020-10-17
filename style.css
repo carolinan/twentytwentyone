@@ -185,8 +185,7 @@ Twenty Twenty-One is distributed under the terms of the GNU GPL.
 	--form--line-height: var(--global--line-height-body);
 	--form--color-text: var(--global--color-dark-gray);
 	--form--color-ranged: var(--global--color-secondary);
-	--form--label-weight: normal;
-	--form--label-weight-strong: 500;
+	--form--label-weight: 500;
 	--form--border-color: var(--global--color-secondary);
 	--form--border-width: 3px;
 	--form--border-radius: 0;
@@ -311,6 +310,24 @@ Twenty Twenty-One is distributed under the terms of the GNU GPL.
 		--global--font-size-xxxl: 9rem;
 		--heading--font-size-h3: 2rem;
 		--heading--font-size-h2: 3rem;
+	}
+}
+
+/* OS dark theme preference */
+@media (prefers-color-scheme: dark) {
+	html.has-default-light-palette-background {
+		--global--color-background: var(--global--color-dark-gray);
+		--global--color-primary: var(--global--color-light-gray);
+		--global--color-secondary: var(--global--color-light-gray);
+		--button--color-text: var(--global--color-background);
+		--button--color-text-hover: var(--global--color-secondary);
+		--button--color-text-active: var(--global--color-secondary);
+		--button--color-background: var(--global--color-secondary);
+		--button--color-background-hover: var(--global--color-background);
+		--button--color-background-active: var(--global--color-background);
+	}
+	html.has-default-light-palette-background body {
+		background-color: var(--global--color-background);
 	}
 }
 
@@ -1436,7 +1453,7 @@ video {
 figcaption,
 .wp-caption,
 .wp-caption-text {
-	color: var(--global--color-primary);
+	color: currentColor;
 	font-size: var(--global--font-size-xs);
 	line-height: var(--global--line-height-body);
 	margin-top: calc(0.5 * var(--global--spacing-unit));
@@ -2729,7 +2746,7 @@ p.has-text-color a {
 
 .wp-block-search .wp-block-search__label {
 	font-size: var(--form--font-size);
-	font-weight: var(--form--label-weight-strong);
+	font-weight: var(--form--label-weight);
 	margin-bottom: calc(var(--global--spacing-vertical) / 3);
 }
 
@@ -3092,6 +3109,7 @@ table.wp-calendar-table caption {
 	font-style: normal;
 	float: left;
 	margin: 0.1em 0.1em 0 0;
+	font-size: calc(1.2 * var(--heading--font-size-h1));
 }
 
 .has-drop-cap:not(:focus)::after {
@@ -3630,6 +3648,7 @@ h1.page-title {
 }
 
 .comments-area.show-avatars .fn {
+	display: inline-block;
 	padding-left: 85px;
 }
 
@@ -3720,7 +3739,7 @@ h1.page-title {
 
 .comment-meta .comment-metadata {
 	color: var(--global--color-primary);
-	font-size: var(--global--font-size-sm);
+	font-size: var(--global--font-size-xs);
 	padding: 8px 0 9px 0;
 }
 
@@ -3859,7 +3878,7 @@ h1.page-title {
 	font-size: var(--global--font-size-sm);
 	margin-bottom: calc(.5 * var(--global--spacing-unit));
 	width: 100%;
-	font-weight: var(--form--label-weight-strong);
+	font-weight: var(--form--label-weight);
 }
 
 .comment-form > p.comment-form-cookies-consent {
@@ -4645,7 +4664,7 @@ h1.page-title {
 .search-form > label {
 	width: 100%;
 	margin-bottom: 0;
-	font-weight: var(--form--label-weight-strong);
+	font-weight: var(--form--label-weight);
 }
 
 .search-form .search-field {
@@ -4662,12 +4681,15 @@ h1.page-title {
 
 .widget_search > .search-form .search-field {
 	margin-right: calc(-1 * var(--button--border-width));
+	-webkit-appearance: none;
+	margin-bottom: calc(0.5 * var(--global--spacing-vertical));
 }
 
 .widget_search > .search-form .search-submit {
 	margin-left: 0;
 	background-color: transparent;
 	color: var(--button--color-text-hover);
+	margin-bottom: calc(0.5 * var(--global--spacing-vertical));
 }
 
 .widget_search > .search-form .search-submit:hover {
